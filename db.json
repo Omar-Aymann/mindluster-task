@@ -1,0 +1,59 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Design user dashboard",
+      "description": "Create mockups for the new user dashboard interface",
+      "column": "backlog"
+    },
+    {
+      "id": 2,
+      "title": "Set up database schema",
+      "description": "Define tables and relationships for user data",
+      "column": "backlog"
+    },
+    {
+      "id": 3,
+      "title": "Write API documentation",
+      "description": "",
+      "column": "backlog"
+    },
+    {
+      "id": 4,
+      "title": "Implement authentication",
+      "description": "Add login and signup functionality",
+      "column": "inprogress"
+    },
+    {
+      "id": 5,
+      "title": "Build task management API",
+      "description": "Create endpoints for CRUD operations",
+      "column": "inprogress"
+    },
+    {
+      "id": 6,
+      "title": "Code review: Task component",
+      "description": "Review the Task component implementation",
+      "column": "review"
+    },
+    {
+      "id": 7,
+      "title": "Test user registration flow",
+      "description": "Verify all registration edge cases",
+      "column": "review"
+    },
+    {
+      "id": 8,
+      "title": "Set up project structure",
+      "description": "Initialize React project with TypeScript",
+      "column": "done"
+    },
+    {
+      "id": 9,
+      "title": "Configure Material-UI theme",
+      "description": "Set up custom theme and color palette",
+      "column": "done"
+    }
+  ]
+}
+
