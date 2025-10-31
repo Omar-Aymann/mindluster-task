@@ -45,36 +45,69 @@ export const KanbanColumn = ({
     <Grid
       size="grow"
       direction={"column"}
-      gap={"1rem"}
-      className="h-full! transition-all duration-200 rounded-lg"
+      className="h-full transition-all duration-200 rounded-lg"
       container
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
+      wrap="nowrap"
       sx={{
-        "&:hover": {
-          backgroundColor: "transparent",
-        },
+        maxHeight: "100%",
+        overflow: "hidden",
       }}
+      gap={"1rem"}
     >
+      {/* Fixed Header */}
       <Grid
         direction={"row"}
         container
         justifyContent="space-between"
         alignItems="center"
+        sx={{
+          flexShrink: 0,
+          position: "sticky",
+          top: 0,
+          zIndex: 1,
+          backgroundColor: "white",
+        }}
       >
         <Typography variant="h5" fontWeight="normal">
           {title}
         </Typography>
         {showDivider && <Divider orientation="vertical" flexItem />}
       </Grid>
+
+      {/* Scrollable Tasks Container */}
       <Grid
         direction={"row"}
         wrap="nowrap"
         container
         justifyContent="space-between"
-        alignItems="center"
+        alignItems="flex-start"
         gap=".5rem"
+        size="grow"
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        sx={{
+          flexShrink: 1,
+          overflowY: "auto",
+          overflowX: "hidden",
+          minHeight: 0,
+          "&::-webkit-scrollbar": {
+            width: "4px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "transparent",
+            borderRadius: "4px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: "#cbd5e0",
+            borderRadius: "4px",
+            "&:hover": {
+              background: "#a0aec0",
+            },
+          },
+          scrollbarWidth: "thin",
+          scrollbarColor: "#cbd5e0 transparent",
+        }}
       >
         <Grid
           direction={"column"}

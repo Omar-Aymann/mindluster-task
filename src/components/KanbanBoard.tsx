@@ -10,7 +10,13 @@ export const KanbanBoard = () => {
       maxWidth="xl"
       className="bg-white border border-gray-300 rounded-lg px-0!  py-8 h-full"
     >
-      <Grid direction={"column"} container spacing={2}>
+      <Grid
+        direction={"column"}
+        className="h-full!"
+        wrap="nowrap"
+        container
+        spacing={2}
+      >
         <TaskToolbar />
         <Divider />
         <KanbanColumns />

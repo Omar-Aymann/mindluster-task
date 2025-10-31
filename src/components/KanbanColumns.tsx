@@ -53,6 +53,7 @@ export const KanbanColumns = () => {
       gap={"1rem"}
       wrap="nowrap"
       container
+      size="grow"
     >
       <KanbanColumn
         columnId="backlog"
