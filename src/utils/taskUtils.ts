@@ -5,7 +5,7 @@ import type { Task } from "../types/task";
  */
 export const generateTaskId = (tasks: Task[]): number => {
   if (tasks.length === 0) return 1;
-  const maxId = Math.max(...tasks.map((t) => t.id));
+  const maxId = Math.max(...tasks.map((t) => Number(t.id)));
   return maxId + 1;
 };
 
@@ -29,18 +29,34 @@ export const createTask = (
 /**
  * Filters tasks by column
  */
-export const filterTasksByColumn = (
-  tasks: Task[],
-  column: string
-): Task[] => {
+export const filterTasksByColumn = (tasks: Task[], column: string): Task[] => {
   return tasks.filter((task) => task.column === column);
+};
+
+/**
+ * Filters tasks by search query (searches in title and description)
+ */
+export const filterTasksBySearch = (
+  tasks: Task[],
+  searchQuery: string
+): Task[] => {
+  if (!searchQuery.trim()) {
+    return tasks;
+  }
+  const query = searchQuery.toLowerCase().trim();
+  return tasks.filter((task) => {
+    const titleMatch = task.title.toLowerCase().includes(query);
+    const descriptionMatch =
+      task.description?.toLowerCase().includes(query) || false;
+    return titleMatch || descriptionMatch;
+  });
 };
 
 /**
  * Finds a task by ID
  */
 export const findTaskById = (tasks: Task[], id: number): Task | undefined => {
-  return tasks.find((task) => task.id === id);
+  return tasks.find((task) => Number(task.id) === Number(id));
 };
 
 /**
@@ -49,4 +65,3 @@ export const findTaskById = (tasks: Task[], id: number): Task | undefined => {
 export const validateTaskTitle = (title: string): boolean => {
   return title.trim().length > 0;
 };
-

@@ -3,7 +3,9 @@ import type { Task } from "../types/task";
 
 interface TaskStore {
   tasks: Task[];
+  searchQuery: string;
   setTasks: (tasks: Task[]) => void;
+  setSearchQuery: (query: string) => void;
   updateTaskColumn: (taskId: number, newColumn: string) => void;
   addTask: (task: Task) => void;
   updateTask: (taskId: number, updatedTask: Partial<Task>) => void;
@@ -12,11 +14,15 @@ interface TaskStore {
 
 export const useTaskStore = create<TaskStore>((set) => ({
   tasks: [],
+  searchQuery: "",
   setTasks: (tasks) => set({ tasks }),
+  setSearchQuery: (query) => set({ searchQuery: query }),
   updateTaskColumn: (taskId, newColumn) =>
     set((state) => ({
       tasks: state.tasks.map((task) =>
-        task.id === taskId ? { ...task, column: newColumn } : task
+        Number(task.id) === Number(taskId)
+          ? { ...task, column: newColumn }
+          : task
       ),
     })),
   addTask: (task) =>
@@ -26,11 +32,11 @@ export const useTaskStore = create<TaskStore>((set) => ({
   updateTask: (taskId, updatedTask) =>
     set((state) => ({
       tasks: state.tasks.map((task) =>
-        task.id === taskId ? { ...task, ...updatedTask } : task
+        Number(task.id) === Number(taskId) ? { ...task, ...updatedTask } : task
       ),
     })),
   deleteTask: (taskId) =>
     set((state) => ({
-      tasks: state.tasks.filter((task) => task.id !== taskId),
+      tasks: state.tasks.filter((task) => Number(task.id) !== Number(taskId)),
     })),
 }));
