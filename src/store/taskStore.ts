@@ -25,6 +25,7 @@ export const useTaskStore = create<TaskStore>((set) => ({
           : task
       ),
     })),
+
   addTask: (task) =>
     set((state) => ({
       tasks: [...state.tasks, task],
