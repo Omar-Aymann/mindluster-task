@@ -3,17 +3,8 @@ import Grid from "@mui/material/Grid";
 import { useQuery } from "@tanstack/react-query";
 import { KanbanColumn } from "./KanbanColumn";
 import { useTaskStore } from "../store/taskStore";
-import type { Task } from "../types/task";
-
-const API_URL = "http://localhost:3001/tasks";
-
-const fetchTasks = async (): Promise<Task[]> => {
-  const response = await fetch(API_URL);
-  if (!response.ok) {
-    throw new Error("Failed to fetch tasks");
-  }
-  return response.json();
-};
+import { fetchTasks } from "../utils/apiUtils";
+import { filterTasksByColumn } from "../utils/taskUtils";
 
 export const KanbanColumns = () => {
   const { tasks, setTasks, updateTaskColumn } = useTaskStore();
@@ -41,10 +32,10 @@ export const KanbanColumns = () => {
     return <div>Error loading tasks: {error.message}</div>;
   }
 
-  const backlogTasks = tasks.filter((task) => task.column === "backlog");
-  const inProgressTasks = tasks.filter((task) => task.column === "inprogress");
-  const reviewTasks = tasks.filter((task) => task.column === "review");
-  const doneTasks = tasks.filter((task) => task.column === "done");
+  const backlogTasks = filterTasksByColumn(tasks, "backlog");
+  const inProgressTasks = filterTasksByColumn(tasks, "inprogress");
+  const reviewTasks = filterTasksByColumn(tasks, "review");
+  const doneTasks = filterTasksByColumn(tasks, "done");
 
   return (
     <Grid

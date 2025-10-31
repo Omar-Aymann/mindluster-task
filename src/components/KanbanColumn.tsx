@@ -2,6 +2,11 @@ import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import { Task as TaskComponent } from "./Task";
+import {
+  handleColumnDragOver,
+  handleColumnDragLeave,
+  handleColumnDrop,
+} from "../utils/dragDropUtils";
 import type { Task } from "../types/task";
 
 interface KanbanColumnProps {
@@ -20,25 +25,15 @@ export const KanbanColumn = ({
   onTaskDrop,
 }: KanbanColumnProps) => {
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "move";
-    const target = event.currentTarget;
-    target.style.backgroundColor = "rgba(0, 0, 0, 0.02)";
+    handleColumnDragOver(event);
   };
 
   const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    const target = event.currentTarget;
-    target.style.backgroundColor = "transparent";
+    handleColumnDragLeave(event);
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const target = event.currentTarget;
-    target.style.backgroundColor = "transparent";
-    const taskId = event.dataTransfer.getData("taskId");
-    if (taskId) {
-      onTaskDrop(parseInt(taskId, 10), columnId);
-    }
+    handleColumnDrop(event, onTaskDrop, columnId);
   };
 
   return (

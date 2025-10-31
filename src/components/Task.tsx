@@ -7,6 +7,8 @@ import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useTaskStore } from "../store/taskStore";
 import { TaskModal } from "./TaskModal";
 import { DeleteTaskModal } from "./DeleteTaskModal";
+import { handleTaskDragStart, handleTaskDragEnd } from "../utils/dragDropUtils";
+import { findTaskById } from "../utils/taskUtils";
 import type { Task as TaskType } from "../types/task";
 
 interface TaskProps {
@@ -20,7 +22,7 @@ export const Task = ({ id, title, description }: TaskProps) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { tasks, deleteTask } = useTaskStore();
 
-  const task: TaskType | undefined = tasks.find((t) => t.id === id);
+  const task: TaskType | undefined = findTaskById(tasks, id);
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -35,15 +37,13 @@ export const Task = ({ id, title, description }: TaskProps) => {
   const handleConfirmDelete = () => {
     deleteTask(id);
   };
+
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
-    event.dataTransfer.setData("taskId", id.toString());
-    event.dataTransfer.effectAllowed = "move";
-    const target = event.currentTarget;
-    target.style.opacity = "0.5";
+    handleTaskDragStart(event, id);
   };
 
   const handleDragEnd = (event: React.DragEvent<HTMLDivElement>) => {
-    event.currentTarget.style.opacity = "1";
+    handleTaskDragEnd(event);
   };
 
   return (

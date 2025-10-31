@@ -10,6 +10,11 @@ import {
 } from "@mui/material";
 import { useTaskStore } from "../store/taskStore";
 import { PrimaryButton } from "./PrimaryButton";
+import {
+  generateTaskId,
+  createTask,
+  validateTaskTitle,
+} from "../utils/taskUtils";
 import type { Task } from "../types/task";
 
 interface TaskModalProps {
@@ -36,22 +41,15 @@ export const TaskModal = ({ open, onClose, task }: TaskModalProps) => {
   }, [task, open]);
 
   const handleSubmit = () => {
-    if (title.trim()) {
+    if (validateTaskTitle(title)) {
       if (isEditMode && task) {
         updateTask(task.id, {
           title: title.trim(),
           description: description.trim(),
         });
       } else {
-        // Generate a new ID (get max ID + 1)
-        const maxId =
-          tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) : 0;
-        const newTask: Task = {
-          id: maxId + 1,
-          title: title.trim(),
-          description: description.trim(),
-          column: "backlog",
-        };
+        const newId = generateTaskId(tasks);
+        const newTask = createTask(newId, title, description);
         addTask(newTask);
       }
       handleClose();
@@ -97,7 +95,10 @@ export const TaskModal = ({ open, onClose, task }: TaskModalProps) => {
         <Button onClick={handleClose} color="inherit">
           Cancel
         </Button>
-        <PrimaryButton onClick={handleSubmit} disabled={!title.trim()}>
+        <PrimaryButton
+          onClick={handleSubmit}
+          disabled={!validateTaskTitle(title)}
+        >
           {isEditMode ? "Save Changes" : "Add Task"}
         </PrimaryButton>
       </DialogActions>
