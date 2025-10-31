@@ -1,26 +1,45 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Grid from "@mui/material/Grid";
+import { useQuery } from "@tanstack/react-query";
 import { KanbanColumn } from "./KanbanColumn";
+import { useTaskStore } from "../store/taskStore";
 import type { Task } from "../types/task";
 
 const API_URL = "http://localhost:3001/tasks";
 
+const fetchTasks = async (): Promise<Task[]> => {
+  const response = await fetch(API_URL);
+  if (!response.ok) {
+    throw new Error("Failed to fetch tasks");
+  }
+  return response.json();
+};
+
 export const KanbanColumns = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const { tasks, setTasks, updateTaskColumn } = useTaskStore();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["tasks"],
+    queryFn: fetchTasks,
+  });
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-        setTasks(data);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
-    };
+    if (data) {
+      setTasks(data);
+    }
+  }, [data, setTasks]);
 
-    fetchTasks();
-  }, []);
+  const handleTaskDrop = (taskId: number, newColumn: string) => {
+    updateTaskColumn(taskId, newColumn);
+  };
+
+  if (isLoading) {
+    return <div>Loading tasks...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading tasks: {error.message}</div>;
+  }
 
   const backlogTasks = tasks.filter((task) => task.column === "backlog");
   const inProgressTasks = tasks.filter((task) => task.column === "inprogress");
@@ -35,10 +54,31 @@ export const KanbanColumns = () => {
       wrap="nowrap"
       container
     >
-      <KanbanColumn title="Backlog" tasks={backlogTasks} />
-      <KanbanColumn title="In Progress" tasks={inProgressTasks} />
-      <KanbanColumn title="Review" tasks={reviewTasks} />
-      <KanbanColumn title="Done" tasks={doneTasks} showDivider={false} />
+      <KanbanColumn
+        columnId="backlog"
+        title="Backlog"
+        tasks={backlogTasks}
+        onTaskDrop={handleTaskDrop}
+      />
+      <KanbanColumn
+        columnId="inprogress"
+        title="In Progress"
+        tasks={inProgressTasks}
+        onTaskDrop={handleTaskDrop}
+      />
+      <KanbanColumn
+        columnId="review"
+        title="Review"
+        tasks={reviewTasks}
+        onTaskDrop={handleTaskDrop}
+      />
+      <KanbanColumn
+        columnId="done"
+        title="Done"
+        tasks={doneTasks}
+        showDivider={false}
+        onTaskDrop={handleTaskDrop}
+      />
     </Grid>
   );
 };

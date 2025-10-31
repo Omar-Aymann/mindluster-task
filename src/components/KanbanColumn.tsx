@@ -5,16 +5,33 @@ import { Task as TaskComponent } from "./Task";
 import type { Task } from "../types/task";
 
 interface KanbanColumnProps {
+  columnId: string;
   title: string;
   tasks: Task[];
   showDivider?: boolean;
+  onTaskDrop: (taskId: number, newColumn: string) => void;
 }
 
 export const KanbanColumn = ({
+  columnId,
   title,
   tasks,
   showDivider = true,
+  onTaskDrop,
 }: KanbanColumnProps) => {
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const taskId = event.dataTransfer.getData("taskId");
+    if (taskId) {
+      onTaskDrop(parseInt(taskId, 10), columnId);
+    }
+  };
+
   return (
     <Grid
       size="grow"
@@ -22,6 +39,8 @@ export const KanbanColumn = ({
       gap={"1rem"}
       className="h-full!"
       container
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
     >
       <Grid
         direction={"row"}
@@ -52,6 +71,7 @@ export const KanbanColumn = ({
           {tasks.map((task) => (
             <TaskComponent
               key={task.id}
+              id={task.id}
               title={task.title}
               description={task.description}
             />

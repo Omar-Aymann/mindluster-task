@@ -5,14 +5,21 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 
 interface TaskProps {
+  id: number;
   title: string;
   description?: string;
 }
 
-export const Task = ({ title, description }: TaskProps) => {
+export const Task = ({ id, title, description }: TaskProps) => {
+  const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
+    event.dataTransfer.setData("taskId", id.toString());
+    event.dataTransfer.effectAllowed = "move";
+  };
+
   return (
     <Grid
       draggable={true}
+      onDragStart={handleDragStart}
       container
       direction="column"
       className="p-4 rounded-lg border border-gray-300 select-none"
