@@ -1,74 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import { KanbanColumn } from "./KanbanColumn";
 import type { Task } from "../types/task";
 
+const API_URL = "http://localhost:3001/tasks";
+
 export const KanbanColumns = () => {
-  const [backlogTasks] = useState<Task[]>([
-    {
-      id: 1,
-      title: "Design user dashboard",
-      description: "Create mockups for the new user dashboard interface",
-      column: "backlog",
-    },
-    {
-      id: 2,
-      title: "Set up database schema",
-      description: "Define tables and relationships for user data",
-      column: "backlog",
-    },
-    {
-      id: 3,
-      title: "Write API documentation",
-      description: "",
-      column: "backlog",
-    },
-  ]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-  const [inProgressTasks] = useState<Task[]>([
-    {
-      id: 4,
-      title: "Implement authentication",
-      description: "Add login and signup functionality",
-      column: "inprogress",
-    },
-    {
-      id: 5,
-      title: "Build task management API",
-      description: "Create endpoints for CRUD operations",
-      column: "inprogress",
-    },
-  ]);
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
 
-  const [reviewTasks] = useState<Task[]>([
-    {
-      id: 6,
-      title: "Code review: Task component",
-      description: "Review the Task component implementation",
-      column: "review",
-    },
-    {
-      id: 7,
-      title: "Test user registration flow",
-      description: "Verify all registration edge cases",
-      column: "review",
-    },
-  ]);
+    fetchTasks();
+  }, []);
 
-  const [doneTasks] = useState<Task[]>([
-    {
-      id: 8,
-      title: "Set up project structure",
-      description: "Initialize React project with TypeScript",
-      column: "done",
-    },
-    {
-      id: 9,
-      title: "Configure Material-UI theme",
-      description: "Set up custom theme and color palette",
-      column: "done",
-    },
-  ]);
+  const backlogTasks = tasks.filter((task) => task.column === "backlog");
+  const inProgressTasks = tasks.filter((task) => task.column === "inprogress");
+  const reviewTasks = tasks.filter((task) => task.column === "review");
+  const doneTasks = tasks.filter((task) => task.column === "done");
 
   return (
     <Grid

@@ -12,6 +12,7 @@ interface TaskProps {
 export const Task = ({ title, description }: TaskProps) => {
   return (
     <Grid
+      draggable={true}
       container
       direction="column"
       className="p-4 rounded-lg border border-gray-300 select-none"
