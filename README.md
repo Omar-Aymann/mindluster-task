@@ -51,34 +51,19 @@ Follow these steps to set up the project:
    npm install
    ```
 
-3. Install json-server globally (if not already installed):
-   ```bash
-   npm install -g json-server
-   ```
+This will install all required dependencies including json-server as a development dependency.
 
 ## Running the Application
 
-The application requires two processes to run simultaneously: the mock API server and the development server. You will need to run these commands in separate terminal windows.
-
-### Starting the Mock API Server
-
-In the first terminal, start the json-server to provide the REST API:
-
-```bash
-npm run server
-```
-
-This command starts json-server on `http://localhost:3001` and watches the `db.json` file for changes.
-
-### Starting the Development Server
-
-In a second terminal, start the Vite development server:
+To start the application, simply run:
 
 ```bash
 npm run dev
 ```
 
-The development server will start and display the local URL (typically `http://localhost:5173`). Open this URL in your browser to view the application.
+This command automatically starts both the json-server API (on `http://localhost:3001`) and the Vite development server (typically on `http://localhost:5173`). You can open the development server URL in your browser to view the application.
+
+Both servers will run concurrently in the same terminal window. The json-server watches `db.json` for changes, and the Vite server provides hot module replacement for the React application.
 
 ## Project Structure
 
@@ -111,11 +96,11 @@ src/
 
 The following npm scripts are available:
 
-- `npm run dev` - Start the Vite development server
+- `npm run dev` - Start both json-server API and Vite development server concurrently
 - `npm run build` - Create a production build
 - `npm run preview` - Preview the production build locally
 - `npm run lint` - Run ESLint to check code quality
-- `npm run server` - Start json-server API on port 3001
+- `npm run server` - Start json-server API on port 3001 (used internally by dev script)
 
 ## Usage Guide
 
