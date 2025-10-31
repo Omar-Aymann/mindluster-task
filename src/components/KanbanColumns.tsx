@@ -4,10 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { KanbanColumn } from "./KanbanColumn";
 import { useTaskStore } from "../store/taskStore";
 import { fetchTasks } from "../utils/apiUtils";
-import { filterTasksByColumn } from "../utils/taskUtils";
+import { filterTasksByColumn, filterTasksBySearch } from "../utils/taskUtils";
 
 export const KanbanColumns = () => {
-  const { tasks, setTasks, updateTaskColumn } = useTaskStore();
+  const { tasks, setTasks, updateTaskColumn, searchQuery } = useTaskStore();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["tasks"],
@@ -32,10 +32,12 @@ export const KanbanColumns = () => {
     return <div>Error loading tasks: {error.message}</div>;
   }
 
-  const backlogTasks = filterTasksByColumn(tasks, "backlog");
-  const inProgressTasks = filterTasksByColumn(tasks, "inprogress");
-  const reviewTasks = filterTasksByColumn(tasks, "review");
-  const doneTasks = filterTasksByColumn(tasks, "done");
+  // First filter by search query, then filter by column
+  const filteredTasks = filterTasksBySearch(tasks, searchQuery);
+  const backlogTasks = filterTasksByColumn(filteredTasks, "backlog");
+  const inProgressTasks = filterTasksByColumn(filteredTasks, "inprogress");
+  const reviewTasks = filterTasksByColumn(filteredTasks, "review");
+  const doneTasks = filterTasksByColumn(filteredTasks, "done");
 
   return (
     <Grid

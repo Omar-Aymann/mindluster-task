@@ -6,9 +6,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import { TaskModal } from "./TaskModal";
 import { PrimaryButton } from "./PrimaryButton";
+import { useTaskStore } from "../store/taskStore";
 
 export const TaskToolbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { searchQuery, setSearchQuery } = useTaskStore();
 
   return (
     <>
@@ -24,6 +26,8 @@ export const TaskToolbar = () => {
             placeholder="Search by task title or description"
             variant="outlined"
             className="w-full"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             slotProps={{
               input: {
                 startAdornment: (
