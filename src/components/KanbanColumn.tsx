@@ -1,17 +1,12 @@
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import { Task } from "./Task";
-
-interface TaskData {
-  id: string;
-  title: string;
-  description?: string;
-}
+import { Task as TaskComponent } from "./Task";
+import type { Task } from "../types/task";
 
 interface KanbanColumnProps {
   title: string;
-  tasks: TaskData[];
+  tasks: Task[];
   showDivider?: boolean;
 }
 
@@ -55,7 +50,7 @@ export const KanbanColumn = ({
           spacing={2}
         >
           {tasks.map((task) => (
-            <Task
+            <TaskComponent
               key={task.id}
               title={task.title}
               description={task.description}

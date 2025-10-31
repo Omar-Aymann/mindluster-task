@@ -14,7 +14,7 @@ export const Task = ({ title, description }: TaskProps) => {
     <Grid
       container
       direction="column"
-      className="p-4 rounded-lg border border-gray-300"
+      className="p-4 rounded-lg border border-gray-300 select-none"
     >
       <Typography variant="h6" fontWeight="medium">
         {title}
