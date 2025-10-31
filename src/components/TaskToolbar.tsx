@@ -1,11 +1,11 @@
 import { useState } from "react";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
-import { AddTaskModal } from "./AddTaskModal";
+import { TaskModal } from "./TaskModal";
+import { PrimaryButton } from "./PrimaryButton";
 
 export const TaskToolbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,17 +48,15 @@ export const TaskToolbar = () => {
           />
         </Grid>
         <Grid className="w-36 h-full!">
-          <Button
-            className=" w-full h-full rounded-xl! bg-blue-600!"
-            variant="contained"
-            color="primary"
+          <PrimaryButton
+            className="w-full h-full rounded-xl!"
             onClick={() => setIsModalOpen(true)}
           >
             <Typography variant="subtitle2">Add Task</Typography>
-          </Button>
+          </PrimaryButton>
         </Grid>
       </Grid>
-      <AddTaskModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <TaskModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
 };

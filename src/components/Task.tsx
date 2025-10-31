@@ -1,8 +1,13 @@
+import { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import { useTaskStore } from "../store/taskStore";
+import { TaskModal } from "./TaskModal";
+import { DeleteTaskModal } from "./DeleteTaskModal";
+import type { Task as TaskType } from "../types/task";
 
 interface TaskProps {
   id: number;
@@ -11,6 +16,25 @@ interface TaskProps {
 }
 
 export const Task = ({ id, title, description }: TaskProps) => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { tasks, deleteTask } = useTaskStore();
+
+  const task: TaskType | undefined = tasks.find((t) => t.id === id);
+
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteTask(id);
+  };
   const handleDragStart = (event: React.DragEvent<HTMLDivElement>) => {
     event.dataTransfer.setData("taskId", id.toString());
     event.dataTransfer.effectAllowed = "move";
@@ -60,14 +84,30 @@ export const Task = ({ id, title, description }: TaskProps) => {
         justifyContent="flex-end"
         alignItems="center"
         gap={1}
+        onMouseDown={(e) => e.stopPropagation()}
       >
-        <IconButton size="small">
+        <IconButton size="small" onClick={handleEdit}>
           <EditOutlinedIcon />
         </IconButton>
-        <IconButton size="small">
+        <IconButton size="small" onClick={handleDelete}>
           <DeleteOutlinedIcon />
         </IconButton>
       </Grid>
+      {task && (
+        <>
+          <TaskModal
+            open={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            task={task}
+          />
+          <DeleteTaskModal
+            open={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleConfirmDelete}
+            taskTitle={task.title}
+          />
+        </>
+      )}
     </Grid>
   );
 };

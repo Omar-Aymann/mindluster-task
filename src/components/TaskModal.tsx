@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -9,31 +9,52 @@ import {
   Grid,
 } from "@mui/material";
 import { useTaskStore } from "../store/taskStore";
+import { PrimaryButton } from "./PrimaryButton";
+import type { Task } from "../types/task";
 
-interface AddTaskModalProps {
+interface TaskModalProps {
   open: boolean;
   onClose: () => void;
+  task?: Task | null;
 }
 
-export const AddTaskModal = ({ open, onClose }: AddTaskModalProps) => {
+export const TaskModal = ({ open, onClose, task }: TaskModalProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const { tasks, addTask } = useTaskStore();
+  const { tasks, addTask, updateTask } = useTaskStore();
+
+  const isEditMode = !!task;
+
+  useEffect(() => {
+    if (task) {
+      setTitle(task.title);
+      setDescription(task.description);
+    } else {
+      setTitle("");
+      setDescription("");
+    }
+  }, [task, open]);
 
   const handleSubmit = () => {
     if (title.trim()) {
-      // Generate a new ID (get max ID + 1)
-      const maxId = tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) : 0;
-      const newTask = {
-        id: maxId + 1,
-        title: title.trim(),
-        description: description.trim(),
-        column: "backlog",
-      };
-      addTask(newTask);
-      setTitle("");
-      setDescription("");
-      onClose();
+      if (isEditMode && task) {
+        updateTask(task.id, {
+          title: title.trim(),
+          description: description.trim(),
+        });
+      } else {
+        // Generate a new ID (get max ID + 1)
+        const maxId =
+          tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) : 0;
+        const newTask: Task = {
+          id: maxId + 1,
+          title: title.trim(),
+          description: description.trim(),
+          column: "backlog",
+        };
+        addTask(newTask);
+      }
+      handleClose();
     }
   };
 
@@ -45,7 +66,7 @@ export const AddTaskModal = ({ open, onClose }: AddTaskModalProps) => {
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Add New Task</DialogTitle>
+      <DialogTitle>{isEditMode ? "Edit Task" : "Add New Task"}</DialogTitle>
       <DialogContent>
         <Grid container direction="column" spacing={2} sx={{ mt: 1 }}>
           <Grid>
@@ -76,14 +97,9 @@ export const AddTaskModal = ({ open, onClose }: AddTaskModalProps) => {
         <Button onClick={handleClose} color="inherit">
           Cancel
         </Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          color="primary"
-          disabled={!title.trim()}
-        >
-          Add Task
-        </Button>
+        <PrimaryButton onClick={handleSubmit} disabled={!title.trim()}>
+          {isEditMode ? "Save Changes" : "Add Task"}
+        </PrimaryButton>
       </DialogActions>
     </Dialog>
   );
