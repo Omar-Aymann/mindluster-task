@@ -32,8 +32,9 @@ export const KanbanColumns = () => {
     return <div>Error loading tasks: {error.message}</div>;
   }
 
-  // First filter by search query, then filter by column
-  const filteredTasks = filterTasksBySearch(tasks, searchQuery);
+  // Ensure tasks is always an array, then filter by search query, then filter by column
+  const tasksArray = Array.isArray(tasks) ? tasks : [];
+  const filteredTasks = filterTasksBySearch(tasksArray, searchQuery);
   const backlogTasks = filterTasksByColumn(filteredTasks, "backlog");
   const inProgressTasks = filterTasksByColumn(filteredTasks, "inprogress");
   const reviewTasks = filterTasksByColumn(filteredTasks, "review");

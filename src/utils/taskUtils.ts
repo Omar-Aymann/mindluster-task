@@ -30,6 +30,9 @@ export const createTask = (
  * Filters tasks by column
  */
 export const filterTasksByColumn = (tasks: Task[], column: string): Task[] => {
+  if (!Array.isArray(tasks)) {
+    return [];
+  }
   return tasks.filter((task) => task.column === column);
 };
 
@@ -40,6 +43,9 @@ export const filterTasksBySearch = (
   tasks: Task[],
   searchQuery: string
 ): Task[] => {
+  if (!Array.isArray(tasks)) {
+    return [];
+  }
   if (!searchQuery.trim()) {
     return tasks;
   }
