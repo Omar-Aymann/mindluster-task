@@ -51,13 +51,35 @@ export const TaskToolbar = () => {
             }}
           />
         </Grid>
-        <Grid className="w-36 h-full!">
-          <PrimaryButton
-            className="w-full h-full rounded-xl!"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <Typography variant="subtitle2">Add Task</Typography>
-          </PrimaryButton>
+        <Grid container gap={1} className="h-full!" wrap="nowrap">
+          <Grid className="w-32 h-full!">
+            <PrimaryButton
+              className="w-full h-full rounded-xl!"
+              onClick={() =>
+                window.open(
+                  "https://mindluster-jquery-task.vercel.app/",
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
+              sx={{
+                backgroundColor: "#10b981",
+                "&:hover": {
+                  backgroundColor: "#059669",
+                },
+              }}
+            >
+              <Typography variant="subtitle2">Bonus</Typography>
+            </PrimaryButton>
+          </Grid>
+          <Grid className="w-36 h-full!">
+            <PrimaryButton
+              className="w-full h-full rounded-xl!"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <Typography variant="subtitle2">Add Task</Typography>
+            </PrimaryButton>
+          </Grid>
         </Grid>
       </Grid>
       <TaskModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
