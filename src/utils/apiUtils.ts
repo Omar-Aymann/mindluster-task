@@ -35,7 +35,19 @@ export const fetchTasks = async (): Promise<Task[]> => {
   if (!response.ok) {
     throw new Error("Failed to fetch tasks");
   }
-  return response.json();
+  const data = await response.json();
+
+  // Handle different response formats:
+  // 1. If data is already an array, return it
+  // 2. If data has a 'tasks' property (object format), extract the array
+  // 3. Otherwise return empty array
+  if (Array.isArray(data)) {
+    return data;
+  }
+  if (data && typeof data === "object" && Array.isArray(data.tasks)) {
+    return data.tasks;
+  }
+  return [];
 };
 
 export { API_URL };
