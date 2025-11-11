@@ -40,10 +40,12 @@ export const KanbanColumn = ({
     <Grid
       size="grow"
       direction={"column"}
-      className="h-full transition-all duration-200 rounded-lg"
+      className="transition-all duration-200 rounded-lg"
       container
       wrap="nowrap"
       sx={{
+        height: "100%",
+        width: "100%",
         maxHeight: "100%",
         overflow: "hidden",
       }}
@@ -66,7 +68,13 @@ export const KanbanColumn = ({
         <Typography variant="h5" fontWeight="normal">
           {title}
         </Typography>
-        {showDivider && <Divider orientation="vertical" flexItem />}
+        {showDivider && (
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ display: { xs: "none", md: "block" } }}
+          />
+        )}
       </Grid>
 
       {/* Scrollable Tasks Container */}
@@ -120,7 +128,13 @@ export const KanbanColumn = ({
             />
           ))}
         </Grid>
-        {showDivider && <Divider orientation="vertical" flexItem />}
+        {showDivider && (
+          <Divider
+            orientation="vertical"
+            flexItem
+            sx={{ display: { xs: "none", md: "block" } }}
+          />
+        )}
       </Grid>
     </Grid>
   );

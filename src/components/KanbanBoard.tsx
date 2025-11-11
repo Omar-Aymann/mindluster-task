@@ -12,14 +12,30 @@ export const KanbanBoard = () => {
     >
       <Grid
         direction={"column"}
-        className="h-full!"
         wrap="nowrap"
         container
         spacing={2}
+        sx={{
+          height: "100%",
+          width: "100%",
+        }}
       >
-        <TaskToolbar />
+        <Grid size="auto">
+          <TaskToolbar />
+        </Grid>
         <Divider />
-        <KanbanColumns />
+        <Grid
+          size="grow"
+          sx={{
+            minHeight: 0,
+            overflow: { xs: "auto", md: "hidden" },
+            display: "flex",
+            flexDirection: "column",
+            flex: 1,
+          }}
+        >
+          <KanbanColumns />
+        </Grid>
       </Grid>
     </Container>
   );

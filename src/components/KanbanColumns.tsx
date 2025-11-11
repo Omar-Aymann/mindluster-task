@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import Grid from "@mui/material/Grid";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 import { useQuery } from "@tanstack/react-query";
 import { KanbanColumn } from "./KanbanColumn";
+import { LoadingSkeleton } from "./LoadingSkeleton";
 import { useTaskStore } from "../store/taskStore";
 import { fetchTasks } from "../utils/apiUtils";
 import { filterTasksByColumn, filterTasksBySearch } from "../utils/taskUtils";
@@ -25,11 +28,25 @@ export const KanbanColumns = () => {
   };
 
   if (isLoading) {
-    return <div>Loading tasks...</div>;
+    return <LoadingSkeleton />;
   }
 
   if (error) {
-    return <div>Error loading tasks: {error.message}</div>;
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        sx={{ height: "100%", p: 4 }}
+      >
+        <Alert severity="error" sx={{ width: "100%", maxWidth: 600 }}>
+          <AlertTitle>Error Loading Tasks</AlertTitle>
+          {error instanceof Error
+            ? error.message
+            : "An unexpected error occurred while loading tasks."}
+        </Alert>
+      </Grid>
+    );
   }
 
   // Ensure tasks is always an array, then filter by search query, then filter by column
@@ -43,37 +60,98 @@ export const KanbanColumns = () => {
   return (
     <Grid
       direction={"row"}
-      className="px-4 h-full! w-full"
       gap={"1rem"}
-      wrap="nowrap"
+      wrap="wrap"
       container
-      size="grow"
+      sx={{
+        height: "100%",
+        width: "100%",
+        px: { xs: 2, md: 4 },
+        flex: 1,
+        minHeight: 0,
+        overflow: { xs: "auto", md: "hidden" },
+        "& > .MuiGrid-item": {
+          "@media (min-width: 900px)": {
+            flexBasis: "auto",
+            flexGrow: 1,
+            maxWidth: "none",
+          },
+        },
+      }}
     >
-      <KanbanColumn
-        columnId="backlog"
-        title="Backlog"
-        tasks={backlogTasks}
-        onTaskDrop={handleTaskDrop}
-      />
-      <KanbanColumn
-        columnId="inprogress"
-        title="In Progress"
-        tasks={inProgressTasks}
-        onTaskDrop={handleTaskDrop}
-      />
-      <KanbanColumn
-        columnId="review"
-        title="Review"
-        tasks={reviewTasks}
-        onTaskDrop={handleTaskDrop}
-      />
-      <KanbanColumn
-        columnId="done"
-        title="Done"
-        tasks={doneTasks}
-        showDivider={false}
-        onTaskDrop={handleTaskDrop}
-      />
+      <Grid
+        size={{ xs: 12, sm: 6, md: "grow" }}
+        sx={{
+          minHeight: { xs: "300px", md: "100%" },
+          height: { xs: "auto", md: "100%" },
+          maxHeight: { xs: "none", md: "100%" },
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <KanbanColumn
+          columnId="backlog"
+          title="Backlog"
+          tasks={backlogTasks}
+          onTaskDrop={handleTaskDrop}
+        />
+      </Grid>
+      <Grid
+        size={{ xs: 12, sm: 6, md: "grow" }}
+        sx={{
+          minHeight: { xs: "300px", md: "100%" },
+          height: { xs: "auto", md: "100%" },
+          maxHeight: { xs: "none", md: "100%" },
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <KanbanColumn
+          columnId="inprogress"
+          title="In Progress"
+          tasks={inProgressTasks}
+          onTaskDrop={handleTaskDrop}
+        />
+      </Grid>
+      <Grid
+        size={{ xs: 12, sm: 6, md: "grow" }}
+        sx={{
+          minHeight: { xs: "300px", md: "100%" },
+          height: { xs: "auto", md: "100%" },
+          maxHeight: { xs: "none", md: "100%" },
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <KanbanColumn
+          columnId="review"
+          title="Review"
+          tasks={reviewTasks}
+          onTaskDrop={handleTaskDrop}
+        />
+      </Grid>
+      <Grid
+        size={{ xs: 12, sm: 6, md: "grow" }}
+        sx={{
+          minHeight: { xs: "300px", md: "100%" },
+          height: { xs: "auto", md: "100%" },
+          maxHeight: { xs: "none", md: "100%" },
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <KanbanColumn
+          columnId="done"
+          title="Done"
+          tasks={doneTasks}
+          showDivider={false}
+          onTaskDrop={handleTaskDrop}
+        />
+      </Grid>
     </Grid>
   );
 };
