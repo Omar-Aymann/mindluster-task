@@ -7,7 +7,11 @@ import { KanbanColumn } from "./KanbanColumn";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { useTaskStore } from "../store/taskStore";
 import { fetchTasks } from "../utils/apiUtils";
-import { filterTasksByColumn, filterTasksBySearch } from "../utils/taskUtils";
+import {
+  filterTasksByColumn,
+  filterTasksBySearch,
+  sortTasksById,
+} from "../utils/taskUtils";
 
 export const KanbanColumns = () => {
   const { tasks, setTasks, updateTaskColumn, searchQuery } = useTaskStore();
@@ -49,13 +53,19 @@ export const KanbanColumns = () => {
     );
   }
 
-  // Ensure tasks is always an array, then filter by search query, then filter by column
+  // Ensure tasks is always an array, then filter by search query, then filter by column, then sort by ID
   const tasksArray = Array.isArray(tasks) ? tasks : [];
   const filteredTasks = filterTasksBySearch(tasksArray, searchQuery);
-  const backlogTasks = filterTasksByColumn(filteredTasks, "backlog");
-  const inProgressTasks = filterTasksByColumn(filteredTasks, "inprogress");
-  const reviewTasks = filterTasksByColumn(filteredTasks, "review");
-  const doneTasks = filterTasksByColumn(filteredTasks, "done");
+  const backlogTasks = sortTasksById(
+    filterTasksByColumn(filteredTasks, "backlog")
+  );
+  const inProgressTasks = sortTasksById(
+    filterTasksByColumn(filteredTasks, "inprogress")
+  );
+  const reviewTasks = sortTasksById(
+    filterTasksByColumn(filteredTasks, "review")
+  );
+  const doneTasks = sortTasksById(filterTasksByColumn(filteredTasks, "done"));
 
   return (
     <Grid

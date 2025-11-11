@@ -37,6 +37,17 @@ export const filterTasksByColumn = (tasks: Task[], column: string): Task[] => {
 };
 
 /**
+ * Sorts tasks by ID in ascending order (oldest first, newest last)
+ * This ensures newly added tasks appear at the bottom of columns
+ */
+export const sortTasksById = (tasks: Task[]): Task[] => {
+  if (!Array.isArray(tasks)) {
+    return [];
+  }
+  return [...tasks].sort((a, b) => Number(a.id) - Number(b.id));
+};
+
+/**
  * Filters tasks by search query (searches in title and description)
  */
 export const filterTasksBySearch = (
