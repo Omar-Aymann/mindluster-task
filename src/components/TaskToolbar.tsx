@@ -15,74 +15,13 @@ export const TaskToolbar = () => {
   return (
     <>
       <Grid
-        direction={{ xs: "column", md: "row" }}
+        direction={"row"}
         container
-        justifyContent={{ xs: "flex-start", md: "space-between" }}
-        alignItems={{ xs: "stretch", md: "center" }}
-        gap={2}
-        sx={{
-          px: { xs: 2, md: 4 },
-          minHeight: { xs: "auto", md: "48px" },
-        }}
+        justifyContent="space-between  "
+        gap={80}
+        className="h-12 px-4"
       >
-        <Grid
-          container
-          gap={1}
-          wrap="nowrap"
-          sx={{
-            width: { xs: "100%", md: "auto" },
-            height: { xs: "auto", md: "100%" },
-          }}
-        >
-          <Grid
-            sx={{
-              width: { xs: "50%", md: "128px" },
-              height: { xs: "40px", md: "100%" },
-            }}
-          >
-            <PrimaryButton
-              className="w-full h-full rounded-xl!"
-              onClick={() =>
-                window.open(
-                  "https://mindluster-jquery-task.vercel.app/",
-                  "_blank",
-                  "noopener,noreferrer"
-                )
-              }
-              sx={{
-                backgroundColor: "#10b981",
-                "&:hover": {
-                  backgroundColor: "#059669",
-                },
-                height: "100%",
-              }}
-            >
-              <Typography variant="subtitle2">Bonus</Typography>
-            </PrimaryButton>
-          </Grid>
-          <Grid
-            sx={{
-              width: { xs: "50%", md: "144px" },
-              height: { xs: "40px", md: "100%" },
-            }}
-          >
-            <PrimaryButton
-              className="w-full h-full rounded-xl!"
-              onClick={() => setIsModalOpen(true)}
-              sx={{
-                height: "100%",
-              }}
-            >
-              <Typography variant="subtitle2">Add Task</Typography>
-            </PrimaryButton>
-          </Grid>
-        </Grid>
-        <Grid
-          size={{ xs: 12, md: "grow" }}
-          sx={{
-            height: { xs: "40px", md: "100%" },
-          }}
-        >
+        <Grid size="grow" className="h-full!">
           <TextField
             placeholder="Search by task title or description"
             variant="outlined"
@@ -111,6 +50,36 @@ export const TaskToolbar = () => {
               },
             }}
           />
+        </Grid>
+        <Grid container gap={1} className="h-full!" wrap="nowrap">
+          <Grid className="w-32 h-full!">
+            <PrimaryButton
+              className="w-full h-full rounded-xl!"
+              onClick={() =>
+                window.open(
+                  "https://mindluster-jquery-task.vercel.app/",
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+              }
+              sx={{
+                backgroundColor: "#10b981",
+                "&:hover": {
+                  backgroundColor: "#059669",
+                },
+              }}
+            >
+              <Typography variant="subtitle2">Bonus</Typography>
+            </PrimaryButton>
+          </Grid>
+          <Grid className="w-36 h-full!">
+            <PrimaryButton
+              className="w-full h-full rounded-xl!"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <Typography variant="subtitle2">Add Task</Typography>
+            </PrimaryButton>
+          </Grid>
         </Grid>
       </Grid>
       <TaskModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
